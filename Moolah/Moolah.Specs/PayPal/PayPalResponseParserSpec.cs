@@ -267,6 +267,7 @@ namespace Moolah.Specs.PayPal
         static PayPalExpressCheckoutDetails Response;
     }
 
+
     [Subject(typeof(PayPalResponseParser))]
     public class When_parsing_successful_get_express_checkout_details_response_with_partial_order_details : PayPalResponseParserContext
     {
@@ -296,6 +297,7 @@ namespace Moolah.Specs.PayPal
 
         static PayPalExpressCheckoutDetails Response;
     }
+    
 
     [Subject(typeof(PayPalResponseParser))]
     public class When_parsing_successful_do_express_checkout_payment_response : PayPalResponseParserContext
@@ -306,13 +308,23 @@ namespace Moolah.Specs.PayPal
         It should_provide_paypal_transaction_reference = () =>
             Response.TransactionReference.ShouldEqual("paypal-reference"); //PAYMENTINFO_0_TRANSACTIONID
 
+        It should_have_error_code = () =>
+                                  Response.ErrorCode.ShouldEqual("ErrorCode");
+
+        It should_have_severity_code = () =>
+                                  Response.ErrorSeverityCode.ShouldEqual("SeverityCode");
+        It should_have_long_message = () =>
+                                  Response.ErrorLongMsg.ShouldEqual("LongMessage");
+        It should_have_short_message = () =>
+                                  Response.ErrorShortMsg.ShouldEqual("ShortMessage");
+
         Because of = () =>
         {
-            var payPalResponse = HttpUtility.ParseQueryString("ACK=Success&PAYMENTINFO_0_TRANSACTIONID=paypal-reference&PAYMENTINFO_0_PAYMENTSTATUS=Completed");
-            Response = SUT.DoExpressCheckoutPayment(payPalResponse);
+            var payPalResponse = HttpUtility.ParseQueryString("ACK=Success&PAYMENTINFO_0_TRANSACTIONID=paypal-reference&PAYMENTINFO_0_PAYMENTSTATUS=Completed&PAYMENTREQUEST_0_ERRORCODE=ErrorCode&PAYMENTREQUEST_0_SHORTMESSAGE=ShortMessage&PAYMENTREQUEST_0_LONGMESSAGE=LongMessage&PAYMENTREQUEST_0_SEVERITYCODE=SeverityCode");
+            Response = SUT.DoExpressCheckoutPayment(payPalResponse) as PayPalPaymentResponse;
         };
 
-        static IPaymentResponse Response;
+        static PayPalPaymentResponse Response;
     }
 
     [Subject(typeof(PayPalResponseParser))]

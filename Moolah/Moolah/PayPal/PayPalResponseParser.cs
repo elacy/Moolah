@@ -254,6 +254,10 @@ namespace Moolah.PayPal
                         response.Status = PaymentStatus.Failed;
                         response.FailureMessage = "An error occurred processing your PayPal payment.";
                     }
+                    response.ErrorCode = parseOptionalStringValueFromResponse("PAYMENTREQUEST_0_ERRORCODE", payPalResponse);
+                    response.ErrorShortMsg = parseOptionalStringValueFromResponse("PAYMENTREQUEST_0_SHORTMESSAGE", payPalResponse);
+                    response.ErrorLongMsg = parseOptionalStringValueFromResponse("PAYMENTREQUEST_0_LONGMESSAGE", payPalResponse);
+                    response.ErrorSeverityCode = parseOptionalStringValueFromResponse("PAYMENTREQUEST_0_SEVERITYCODE", payPalResponse);
                 },
                 fail: message =>
                 {
