@@ -51,16 +51,27 @@ namespace Moolah.PayPal
             var request = _requestBuilder.SetExpressCheckout(amount,currencyCodeType, cancelUrl, confirmationUrl);
             return setExpressCheckoutRequestFor(request);
         }
-
         public PayPalExpressCheckoutToken SetExpressCheckout(OrderDetails orderDetails, string cancelUrl, string confirmationUrl)
         {
             if (orderDetails == null) throw new ArgumentNullException("orderDetails");
             if (string.IsNullOrWhiteSpace(cancelUrl)) throw new ArgumentNullException("cancelUrl");
             if (string.IsNullOrWhiteSpace(confirmationUrl)) throw new ArgumentNullException("confirmationUrl");
 
-            _logger.Log("SetExpressCheckout.Request", orderDetails);
+            _logger.Log("SetExpressCheckout.Request", new { OrderDetails = orderDetails, CancelUrl = cancelUrl, ConfirmationUrl = confirmationUrl });
 
             var request = _requestBuilder.SetExpressCheckout(orderDetails, cancelUrl, confirmationUrl);
+            return setExpressCheckoutRequestFor(request);
+        }
+        public PayPalExpressCheckoutToken SetExpressCheckout(Address shipToAddress, OrderDetails orderDetails, string cancelUrl, string confirmationUrl)
+        {
+            if (shipToAddress == null) throw new ArgumentNullException("shipToAddress");
+            if (orderDetails == null) throw new ArgumentNullException("orderDetails");
+            if (string.IsNullOrWhiteSpace(cancelUrl)) throw new ArgumentNullException("cancelUrl");
+            if (string.IsNullOrWhiteSpace(confirmationUrl)) throw new ArgumentNullException("confirmationUrl");
+
+            _logger.Log("SetExpressCheckout.Request", new { ShipToAddress = shipToAddress,OrderDetails = orderDetails, CancelUrl = cancelUrl, ConfirmationUrl = confirmationUrl });
+
+            var request = _requestBuilder.SetExpressCheckout(shipToAddress,orderDetails, cancelUrl, confirmationUrl);
             return setExpressCheckoutRequestFor(request);
         }
 

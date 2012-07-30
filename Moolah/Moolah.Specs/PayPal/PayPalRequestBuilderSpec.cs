@@ -229,6 +229,30 @@ namespace Moolah.Specs.PayPal
         protected static NameValueCollection Request;
     }
 
+    [Behaviors]
+    public class ShippingAddressBehavior
+    {
+        private It should_include_shipping_name = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTONAME"].ShouldEqual(ShippingAddress.Name);
+        private It should_include_shipping_street = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOSTREET"].ShouldEqual(ShippingAddress.Street1);
+        private It should_include_shipping_street2 = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOSTREET2"].ShouldEqual(ShippingAddress.Street2);
+        private It should_include_shipping_city = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOCITY"].ShouldEqual(ShippingAddress.City);
+        private It should_include_shipping_state = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOSTATE"].ShouldEqual(ShippingAddress.State);
+        private It should_include_shipping_zip = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOZIP"].ShouldEqual(ShippingAddress.Zip);
+        private It should_include_shipping_country = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE"].ShouldEqual(ShippingAddress.CountryCode);
+        private It should_include_shipping_phone = () =>
+                                                  Request["PAYMENTREQUEST_0_SHIPTOPHONENUM"].ShouldEqual(ShippingAddress.PhoneNumber);
+        
+        protected static Address ShippingAddress;
+        protected static NameValueCollection Request;
+    }
+
     [Subject(typeof(PayPalRequestBuilder))]
     public class When_building_set_express_checkout_request_with_order_details : PayPalRequestBuilderContext
     {
@@ -237,6 +261,53 @@ namespace Moolah.Specs.PayPal
 
         Because of = () =>
             Request = SUT.SetExpressCheckout(OrderDetails, CancelUrl, ConfirmationUrl);
+
+        protected static readonly OrderDetails OrderDetails = new OrderDetails
+        {
+            OrderDescription = "Some order",
+            OrderTotal = 100m,
+            ShippingDiscount = -7.9m,
+            ShippingTotal = 0.54m,
+            TaxTotal = 5m,
+            Items = new[]
+                        {
+                            new OrderDetailsItem
+                                {
+                                    Description = "First Item",
+                                    Name = "FIRST",
+                                    Number = 1,
+                                    ItemUrl = "http://localhost/product?123&navigationid=3"
+                                },
+                            new OrderDetailsItem
+                                {
+                                    Description = "Second Item",
+                                    Name = "2ND",
+                                    Number = 2
+                                }
+                        }
+        };
+    }
+    [Subject(typeof(PayPalRequestBuilder))]
+    public class When_building_set_express_checkout_request_with_order_details_and_address : PayPalRequestBuilderContext
+    {
+        Behaves_like<PayPalCommonRequestBehavior> a_paypal_nvp_request;
+        Behaves_like<OrderDetailsBehavior> add_oder_details;
+        Behaves_like<ShippingAddressBehavior> add_shipping_address;
+
+        Because of = () =>
+            Request = SUT.SetExpressCheckout(ShippingAddress, OrderDetails, CancelUrl, ConfirmationUrl);
+
+        protected static readonly Address ShippingAddress = new Address
+                                                        {
+                                                            City = "City",
+                                                            CountryCode = "US",
+                                                            Name="Name",
+                                                            PhoneNumber = "123",
+                                                            State = "Alaska",
+                                                            Street1 = "1 Street",
+                                                            Street2 = "2 Street",
+                                                            Zip = "12345"
+                                                        };
 
         protected static readonly OrderDetails OrderDetails = new OrderDetails
         {

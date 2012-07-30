@@ -55,7 +55,33 @@ namespace Moolah.Specs.PayPal
         const string CancelUrl = "http://www.yourdomain.com/cancel.html";
         const string ConfirmationUrl = "http://www.yourdomain.com/success.html";
     }
+    [Subject(typeof(PayPalExpressCheckout))]
+    public class When_set_express_checkout_is_called_with_order_details_and_address : PayPalExpressCheckoutContext
+    {
+        It should_return_the_correct_result = () =>
+            Result.ShouldEqual(ExpectedResult);
 
+        Establish context = () =>
+        {
+            ExpectedResult = new PayPalExpressCheckoutToken();
+            OrderDetails = new OrderDetails();
+            Address = new Address();
+            RequestBuilder.WhenToldTo(x => x.SetExpressCheckout(Address,OrderDetails,  CancelUrl, ConfirmationUrl))
+                .Return(HttpUtility.ParseQueryString(Request));
+            ResponseParser.WhenToldTo(x => x.SetExpressCheckout(Param<NameValueCollection>.Matches(r => r.ToString() == Response)))
+                .Return(ExpectedResult);
+        };
+
+        Because of = () =>
+            Result = SUT.SetExpressCheckout(Address, OrderDetails,  CancelUrl, ConfirmationUrl);
+
+        static PayPalExpressCheckoutToken Result;
+        static PayPalExpressCheckoutToken ExpectedResult;
+        static OrderDetails OrderDetails;
+        static Address Address;
+        const string CancelUrl = "http://www.yourdomain.com/cancel.html";
+        const string ConfirmationUrl = "http://www.yourdomain.com/success.html";
+    }
     [Subject(typeof(PayPalExpressCheckout))]
     public class When_get_express_checkout_details_is_called : PayPalExpressCheckoutContext
     {

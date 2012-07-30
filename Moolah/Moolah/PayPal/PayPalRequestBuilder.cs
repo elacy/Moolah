@@ -9,9 +9,10 @@ namespace Moolah.PayPal
     {
         NameValueCollection SetExpressCheckout(decimal amount, CurrencyCodeType currencyCodeType, string cancelUrl, string confirmationUrl);
         NameValueCollection SetExpressCheckout(OrderDetails orderDetails, string cancelUrl, string confirmationUrl);
+        NameValueCollection SetExpressCheckout(Address address, OrderDetails orderDetails, string cancelUrl, string confirmationUrl);
         NameValueCollection GetExpressCheckoutDetails(string payPalToken);
         NameValueCollection DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId);
-        NameValueCollection DoExpressCheckoutPayment(OrderDetails orderDetails,  string payPalToken, string payPalPayerId);
+        NameValueCollection DoExpressCheckoutPayment(OrderDetails orderDetails, string payPalToken, string payPalPayerId);
     }
 
     /// <summary>
@@ -50,7 +51,13 @@ namespace Moolah.PayPal
 
             return request;
         }
+        public NameValueCollection SetExpressCheckout(Address shipToAddress,OrderDetails orderDetails, string cancelUrl, string confirmationUrl)
+        {
+            var request = SetExpressCheckout(orderDetails,cancelUrl,confirmationUrl);
+            addAddressValues(shipToAddress, request);
 
+            return request;
+        }
         public NameValueCollection SetExpressCheckout(OrderDetails orderDetails, string cancelUrl, string confirmationUrl)
         {
             var request = getBaseSetExpressCheckoutRequest(orderDetails.OrderTotal,orderDetails.CurrencyCodeType, cancelUrl, confirmationUrl);
@@ -62,7 +69,17 @@ namespace Moolah.PayPal
 
             return request;
         }
-
+        void addAddressValues(Address address,NameValueCollection request)
+        {
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTONAME", address.Name, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOSTREET", address.Street1, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOSTREET2", address.Street2, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOCITY", address.City, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOSTATE", address.State, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOZIP", address.Zip, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", address.CountryCode, request);
+            addOptionalValueToRequest("PAYMENTREQUEST_0_SHIPTOPHONENUM", address.PhoneNumber, request);
+        }
         void addOrderDetailsValues(OrderDetails orderDetails, NameValueCollection request)
         {
             addOptionalValueToRequest("PAYMENTREQUEST_0_TAXAMT", orderDetails.TaxTotal, request);
