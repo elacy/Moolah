@@ -525,6 +525,25 @@ namespace Moolah.Specs.PayPal
         protected const string PayPalPayerId = "payerId";
         protected const decimal Amount = 12.99m;
     }
+    [Subject(typeof(PayPalRequestBuilder))]
+    public class When_building_do_express_checkout_payment_request_with_different_currency_and_payment_action : PayPalRequestBuilderContext
+    {
+        It should_specify_currency_code = () =>
+            Request["PAYMENTREQUEST_0_CURRENCYCODE"].ShouldEqual("USD");
+
+        It should_specify_sale_payment_action = () =>
+            Request["PAYMENTREQUEST_0_PAYMENTACTION"].ShouldEqual("Authorization");
+
+        It should_specify_formatted_amount = () =>
+            Request["PAYMENTREQUEST_0_AMT"].ShouldEqual(Amount.ToString("0.00"));
+
+        Because of = () =>
+           Request = SUT.DoExpressCheckoutPayment(Amount, CurrencyCodeType.USD, PayPalToken, PayPalPayerId, PaymentAction.Authorization);
+
+        protected const string PayPalToken = "tokenValue";
+        protected const string PayPalPayerId = "payerId";
+        protected const decimal Amount = 12.99m;
+    }
 
     [Subject(typeof(PayPalRequestBuilder))]
     public class When_building_do_express_checkout_payment_request_with_order_details : PayPalRequestBuilderContext

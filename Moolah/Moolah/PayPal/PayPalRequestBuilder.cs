@@ -160,7 +160,7 @@ namespace Moolah.PayPal
             request["PAYERID"] = payPalPayerId;
             request["PAYMENTREQUEST_0_AMT"] = amount.ToString("0.00");
             request["PAYMENTREQUEST_0_CURRENCYCODE"] = currencyCodeType.ToString();
-            request["PAYMENTREQUEST_0_PAYMENTACTION"] = "Sale";
+            request["PAYMENTREQUEST_0_PAYMENTACTION"] = action.ToString();
             return request;
         }
 
