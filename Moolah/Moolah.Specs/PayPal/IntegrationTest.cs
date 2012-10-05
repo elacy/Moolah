@@ -47,7 +47,8 @@ namespace Moolah.Specs.PayPal
                 OrderDetails = new OrderDetails
                 {
                     OrderDescription = "Totals only",
-                    OrderTotal = 14.98m 
+                    OrderTotal = 14.98m,
+                    CurrencyCodeType = CurrencyCodeType.GBP
                 };
     }
 
@@ -81,6 +82,7 @@ namespace Moolah.Specs.PayPal
                                                            }
                                                    },
                                        ShippingTotal = 2m,
+                                       CurrencyCodeType = CurrencyCodeType.GBP,
                                        OrderTotal = 16.98m // OrderTotal = (sum of unitprice * quantity) + shippingtotal
                                    };
     }
@@ -115,6 +117,7 @@ namespace Moolah.Specs.PayPal
                             }
                     },
                 TaxTotal = 3m,
+                CurrencyCodeType = CurrencyCodeType.GBP,
                 OrderTotal = 17.98m // Order Total must equal sum of unit price * quantity + taxtotal
             };
     }
@@ -131,8 +134,9 @@ namespace Moolah.Specs.PayPal
                                                    {
                                                        new OrderDetailsItem { Quantity = 1, UnitPrice = 10m }
                                                    },
-                                       ShippingTotal = 2m,      
+                                       ShippingTotal = 2m,
                                        ShippingDiscount = -1m,
+                                       CurrencyCodeType = CurrencyCodeType.GBP,
                                        OrderTotal = 11m
                                    };            
             };
@@ -155,7 +159,8 @@ namespace Moolah.Specs.PayPal
                     {
                         new DiscountDetails{ Amount = 2m, Description = "Loyalty discount" }
                     },
-                OrderTotal = 8m
+                OrderTotal = 8m,
+                CurrencyCodeType = CurrencyCodeType.GBP
             };
         };
 
