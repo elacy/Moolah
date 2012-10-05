@@ -81,7 +81,7 @@ namespace Moolah
         /// <param name="amount">Transaction amount.  You may have adjusted the amount depending on the delivery options the customer specified in PayPal.</param>
         /// <param name="payPalToken">The PayPal token returned in the initial <see cref="SetExpressCheckout"/> call.</param>
         /// <param name="payPalPayerId">The PayPal PayerID returned in the <see cref="GetExpressCheckoutDetails"/> call.</param>
-        IPaymentResponse DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId);
+        IPaymentResponse DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId, PaymentAction action);
 
         /// <summary>
         /// Performs the payment.
@@ -89,7 +89,7 @@ namespace Moolah
         /// <param name="orderDetails">Detailed information on the order this checkout is for.</param>
         /// <param name="payPalToken">The PayPal token returned in the initial <see cref="SetExpressCheckout"/> call.</param>
         /// <param name="payPalPayerId">The PayPal PayerID returned in the <see cref="GetExpressCheckoutDetails"/> call.</param>        
-        IPaymentResponse DoExpressCheckoutPayment(OrderDetails orderDetails, string payPalToken, string payPalPayerId);
+        IPaymentResponse DoExpressCheckoutPayment(OrderDetails orderDetails, string payPalToken, string payPalPayerId, PaymentAction action);
     }
 
     public interface IGoogleCheckout

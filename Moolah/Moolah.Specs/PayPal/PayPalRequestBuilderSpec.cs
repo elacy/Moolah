@@ -519,7 +519,7 @@ namespace Moolah.Specs.PayPal
             Request["PAYMENTREQUEST_0_AMT"].ShouldEqual(Amount.ToString("0.00"));
 
         Because of = () =>
-           Request = SUT.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, PayPalToken, PayPalPayerId);
+           Request = SUT.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, PayPalToken, PayPalPayerId, PaymentAction.Sale);
 
         protected const string PayPalToken = "tokenValue";
         protected const string PayPalPayerId = "payerId";

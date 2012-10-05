@@ -11,7 +11,7 @@ namespace Moolah.PayPal
         NameValueCollection SetExpressCheckout(OrderDetails orderDetails, string cancelUrl, string confirmationUrl);
         NameValueCollection SetExpressCheckout(Address address, OrderDetails orderDetails, string cancelUrl, string confirmationUrl);
         NameValueCollection GetExpressCheckoutDetails(string payPalToken);
-        NameValueCollection DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId);
+        NameValueCollection DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId, PaymentAction action);
         NameValueCollection DoExpressCheckoutPayment(OrderDetails orderDetails, string payPalToken, string payPalPayerId);
     }
 
@@ -152,7 +152,7 @@ namespace Moolah.PayPal
             return request;
         }
 
-        public NameValueCollection DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId)
+        public NameValueCollection DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId, PaymentAction action)
         {
             var request = getQueryWithCredentials();
             request["METHOD"] = "DoExpressCheckoutPayment";

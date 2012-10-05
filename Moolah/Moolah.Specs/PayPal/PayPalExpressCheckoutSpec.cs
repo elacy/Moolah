@@ -114,14 +114,14 @@ namespace Moolah.Specs.PayPal
         Establish context = () =>
         {
             ExpectedResult = new PayPalPaymentResponse(new NameValueCollection());
-            RequestBuilder.WhenToldTo(x => x.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, Token, PayerId))
+            RequestBuilder.WhenToldTo(x => x.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, Token, PayerId, PaymentAction.Sale))
                 .Return(HttpUtility.ParseQueryString(Request));
             ResponseParser.WhenToldTo(x => x.DoExpressCheckoutPayment(Param<NameValueCollection>.Matches(r => r.ToString() == Response)))
                 .Return(ExpectedResult);
         };
 
         Because of = () =>
-            Result = SUT.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, Token, PayerId);
+            Result = SUT.DoExpressCheckoutPayment(Amount, CurrencyCodeType.GBP, Token, PayerId,PaymentAction.Sale);
 
         static IPaymentResponse Result;
         static PayPalPaymentResponse ExpectedResult;
@@ -147,7 +147,7 @@ namespace Moolah.Specs.PayPal
         };
 
         Because of = () =>
-            Result = SUT.DoExpressCheckoutPayment(OrderDetails, Token, PayerId);
+            Result = SUT.DoExpressCheckoutPayment(OrderDetails, Token, PayerId,PaymentAction.Sale);
 
         static IPaymentResponse Result;
         static PayPalPaymentResponse ExpectedResult;

@@ -93,17 +93,17 @@ namespace Moolah.PayPal
             return _responseParser.GetExpressCheckoutDetails(response);
         }
 
-        public IPaymentResponse DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId)
+        public IPaymentResponse DoExpressCheckoutPayment(decimal amount, CurrencyCodeType currencyCodeType, string payPalToken, string payPalPayerId, PaymentAction action)
         {
             if (amount <= 0) throw new ArgumentOutOfRangeException("amount", "Amount must be greater than zero.");
             if (string.IsNullOrWhiteSpace(payPalToken)) throw new ArgumentNullException("payPalToken");
             if (string.IsNullOrWhiteSpace(payPalPayerId)) throw new ArgumentNullException("payPalPayerId");
 
-            var request = _requestBuilder.DoExpressCheckoutPayment(amount,currencyCodeType, payPalToken, payPalPayerId);
+            var request = _requestBuilder.DoExpressCheckoutPayment(amount,currencyCodeType, payPalToken, payPalPayerId,action);
             return doExpressCheckoutPaymentFor(request);
         }
 
-        public IPaymentResponse DoExpressCheckoutPayment(OrderDetails orderDetails,  string payPalToken, string payPalPayerId)
+        public IPaymentResponse DoExpressCheckoutPayment(OrderDetails orderDetails, string payPalToken, string payPalPayerId, PaymentAction action)
         {
             if (orderDetails == null) throw new ArgumentNullException("orderDetails");
             if (string.IsNullOrWhiteSpace(payPalToken)) throw new ArgumentNullException("payPalToken");
